@@ -1,0 +1,77 @@
+h1.top {
+  font-family: monospace;
+  color: #5f51fe;
+  text-align: center;
+  padding-top: 5%;
+  font-weight: bold;
+  font-size: 100px;
+}
+
+h2.top {
+  font-family: monospace;
+  color: #790614;
+  text-align: center;
+  font-weight: bold;
+}
+
+h3.top {
+  font-family: monospace;
+  color: #2e222f;
+  text-align: center;
+}
+
+h4.top {
+  font-family: monospace;
+  color: #ffffff;
+  text-align: center;
+}
+
+
+h5.header {
+  font-family: monospace;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+h5.values {
+  font-family: monospace;
+  color: #d62142;
+  font-size: 15px
+}
+
+p.top {
+  font-family: monospace;
+  color: #3e3546;
+  text-align: center;
+  padding-top: 5%;
+  font-size: 20px
+}
+
+nav.navi-color {
+  background-color: #d62142;
+}
+
+body {
+  background-color: #fffee6;
+}
+
+a.auth {
+  font: monospace;
+  color: #c97f2f;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+a.navi {
+  font: monospace;
+  color: #ffdd53;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}

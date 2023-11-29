@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <br>
+    <h2 class="top">
+      Manage Documents
+    </h2>
+  <br>
+  <table class="table-light table-bordered center">
+    <thead>
+      <tr>
+        <th scope="col">
+          <h5 class="header">
+            Title
+          </h5>
+        </th>
+        <th scope="col">
+          <h5 class="header">
+            Date
+          </h5>
+        </th>
+        <th scope="col">
+          <h5 class="header">
+            Delete Doc
+          </h5>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>
+          <h5 class="values center">
+            {{ item.title }}
+          </h5>
+        </td>
+        <td>
+          <h5 class="values center" style="width: 75%">
+            {{ item._id.generation_time }}
+          </h5>
+        </td>
+        <td>
+          <form method="post">
+            <button type="submit" name="{{ item._id }}">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

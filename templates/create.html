@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <br>
+    <h2 class="top">
+      New Document
+    </h2>
+    <div class="container center">
+        <form method="post">
+            <label class="form-label">
+                <h3 class="top">
+                    Title:
+                </h3>
+            </label>
+            <input type="text" name="title"
+                   placeholder="Document title"
+                   value="{{ request.form['title'] }}"></input>
+            <br>
+
+            <label class="form-label">
+                <h3 class="top">
+                    Choose Template
+                </h3>
+            </label>
+            <br>
+            <select class="form-select" name="template_select" aria-label="Default select example">
+              <option value="project_description">Project Description</option>
+              <option value="research_paper">Research Paper</option>
+              <option value="logbook">Logbook</option>
+              <option value="blank">Blank Document</option>
+            </select>
+            <br>
+
+            <label class="form-label">
+                <h3 class="top">
+                    Choose Template
+                </h3>
+            </label>
+            <br>
+            <select class="form-select" name="citation_select" aria-label="Default select example">
+              <option value="Harvard">Harvard</option>
+              <option value="APA">APA</option>
+            </select>
+
+            <br>
+            <br>
+            <button type="submit" class="btn btn-lg" style="background-color: #edd36c;">Submit</button>
+        </form>
+    </div>
+{% endblock %}

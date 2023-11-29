@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+    <br>
+    <h2 class="top">
+        Editing
+    </h2>
+    <div class="container">
+        <button class="btn btn-lg" style="background-color: #3e3546;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        <h4 class="top">
+             Load
+        </h4>
+      </button>
+    </div>
+    <div class="container text-center collapse" id="collapseExample">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <form method="post">
+                    <select class="form-select" name="title_select" aria-label="Default select example">
+                        {% for title in titles %}
+                            <option value="{{ title.title }}">
+                                {{ title.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" name="load" class="btn btn-lg" style="background-color: #f79617;">
+                        <h3 class="top">
+                            Load
+                        </h3>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <form method="post">
+            <input type="hidden" name="curr_title" value="{{ title }}">
+            <h3 class="top" style="">
+                Title: <u>{{ title }}</u>
+            </h3>
+            <textarea name="body">
+                {{ content|safe }}
+            </textarea>
+            <button type="submit" name="save" class="btn btn-lg" style="background-color: #d62142;">
+                <h3 class="top">
+                    Save
+                </h3>
+            </button>
+        </form>
+    </div>
+    <br>
+<script>
+  tinymce.init({
+    selector: 'textarea',
+    skin: 'oxide',
+    plugins: 'autolink image link lists searchreplace table wordcount checklist casechange export formatpainter pageembed pagebreak footnotes advtemplate advtable editimage tableofcontents powerpaste tinymcespellchecker autocorrect a11ychecker typography inlinecss save preview',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image table | align lineheight | checklist numlist bullist indent outdent | removeformat pagebreak | save preview footnotes tableofcontents',
+    pagebreak_separator : "<!-- my page break -->",
+    tinycomments_mode: 'embedded',
+    tinycomments_author: 'Author name',
+    mergetags_list: [
+      { value: 'First.Name', title: 'First Name' },
+      { value: 'Email', title: 'Email' },
+    ],
+    min_height: 1000,
+    min_width: 100,
+  });
+       function mySave() {
+       var myContent = tinymce.get("myTextarea").getContent();
+       localStorage.setItem("myContent", myContent);
+     }
+
+     function myLoad() {
+        var myContent = localStorage.getItem("myContent");
+        tinymce.activeEditor.setContent(myContent);
+        }
+</script>
+
+{% endblock %}
