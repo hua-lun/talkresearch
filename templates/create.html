@@ -3,8 +3,41 @@
 {% block content %}
     <br>
     <h2 class="top">
-      New Document
+      Creating New Things
     </h2>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>
+              <h5 class="top">
+                  <mark style="background-color: #f79617;">
+                      {{ message }}
+                  </mark>
+              </h5>
+          </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active tabs" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+        <h4 class="create">
+            Document
+        </h4>
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link tabs" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+        <h4 class="create">
+            Citation
+        </h4>
+    </button>
+  </li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
     <div class="container center">
         <form method="post">
             <label class="form-label">
@@ -13,7 +46,7 @@
                 </h3>
             </label>
             <input type="text" name="title"
-                   placeholder="Document title"
+                   placeholder="Document title" size="50"
                    value="{{ request.form['title'] }}"></input>
             <br>
 
@@ -38,13 +71,69 @@
             </label>
             <br>
             <select class="form-select" name="citation_select" aria-label="Default select example">
-              <option value="Harvard">Harvard</option>
-              <option value="APA">APA</option>
+              <option value="harvard1">Harvard</option>
+              <option value="apa">APA</option>
+              <option value="vancouver">Vancouver</option>
             </select>
 
             <br>
             <br>
-            <button type="submit" class="btn btn-lg" style="background-color: #edd36c;">Submit</button>
+            <button type="submit" class="btn btn-lg" name="doc_submit" style="background-color: #edd36c;">
+                <h3 class="top">
+                    Submit
+                </h3>
+            </button>
         </form>
     </div>
+  </div>
+<div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+      <div class="container center">
+
+        <form method="post">
+            <label class="form-label">
+                <h3 class="top">
+                    Associated Document:
+                </h3>
+            </label>
+            <select class="form-select" name="title_select" aria-label="Default select example">
+                {% for title in titles %}
+                    <option value="{{ title.title }}">
+                        {{ title.title }}
+                    </option>
+                {% endfor %}
+            </select>
+            <br>
+            <label class="form-label">
+                <h3 class="top">
+                    Paper's DOI:
+                </h3>
+            </label>
+            <br>
+            <input type="text" name="doi"
+                   placeholder="DOI Link" size="50"
+                   value="{{ request.form['doi'] }}"></input>
+            <br>
+            <br>
+            <label class="form-label">
+                <h3 class="top">
+                    [Optional] PDF Link:
+                </h3>
+            </label>
+            <br>
+            <input type="url" name="pdf_link"
+                   placeholder="PDF Link" accept="application/pdf" size="50"
+                   value="{{ request.form['pdf_link'] }}"></input>
+            <br>
+            <br>
+            <button type="submit" name="cite_submit" class="btn btn-lg" style="background-color: #edd36c;">
+                <h3 class="top">
+                    Add Citation
+                </h3>
+            </button>
+        </form>
+
+        </div>
+    </div>
+  </div>
+
 {% endblock %}

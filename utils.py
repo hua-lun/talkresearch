@@ -1,9 +1,8 @@
 import certifi
+import requests
 from os import environ as env
 from dotenv import find_dotenv, load_dotenv
 from pymongo.mongo_client import MongoClient
-import sys
-import pymongo
 
 ENV_FILE = find_dotenv()
 if ENV_FILE:
@@ -35,6 +34,7 @@ def create_doc(user, info):
         'title': info[0],
         'template': info[1],
         'citation': info[2],
+        'bibs': [],
         'content': create_template(info[1])
     }
 
@@ -51,7 +51,7 @@ def get_content(user, title):
         {
             "user": user,
             "title": title
-         }
+        }
     ))
 
     return content[0]['content']
@@ -59,12 +59,69 @@ def get_content(user, title):
 
 def save_content(user, title, content):
     search = {
-            "user": user,
-            "title": title
-         }
+        "user": user,
+        "title": title
+    }
     updated = users.update_one(search, {"$set": {"content": content}})
 
 
 def delete_doc(object_id):
     deleted = users.delete_one({"_id": object_id})
     print(f"deleted: {deleted}")
+
+
+def is_valid_doi(doi):
+    doi_url = 'https://doi.org/api/handles/'
+    r = requests.get(f"{doi_url}{doi}").json()
+
+    return r['responseCode'] == 1
+
+
+URL = env.get("URL")
+
+
+def get_citation(doi_link, style):
+    formatted_url = f"{URL}doi={doi_link}&style={style}"
+    r = requests.get(formatted_url).json()
+    print(r['bib'])
+    return r['bib']
+
+
+def add_citation(cite_doc, doi_link, pdf_link, username):
+    search = {
+        "user": username,
+        "title": cite_doc
+    }
+    details = list(users.find(search))
+    style = details[0]['citation']
+
+    updated = users.update_one(search, {"$push": {"bibs": {
+        "doi_link": doi_link,
+        "pdf_link": pdf_link,
+        "bib": get_citation(doi_link, style)
+    }
+    }})
+
+
+def append_bibliography(bibs, content):
+    content += '\n<p><!-- my page break --></p>'
+    content += '\n<h1>Reference</h1>'
+    for bib in bibs:
+        content += f"\n<p>{bib['bib']}<p>"
+
+    return content
+
+
+def generate_bibliography(user, title, content):
+    search = {
+        "user": user,
+        "title": title
+    }
+    citations = list(users.find(search))
+    bibs = citations[0]['bibs']
+    updated_content = append_bibliography(bibs, content)
+    print(updated_content)
+
+    updated = users.update_one(search, {"$set": {"content": updated_content}})
+
+    return updated_content

@@ -1,5 +1,6 @@
 const express = require("express");
 const Cite = require('citation-js');
+require('@citation-js/plugin-csl')
 const { convert } = require('html-to-text');
 
 const app = express ();
@@ -11,19 +12,20 @@ app.listen(3000, () => {
   });
 
 
-app.get('/citing', async (request, response) => {
-    let example = await Cite.async(request.query.doi)
-   
-    let output = example.format('bibliography', {
-        format: 'html',
-        template: 'apa',
-        lang: 'en-US'
-      })
-    
-    let results = convert(output)
-    response.send({
-        bib: results
+app.get('/citing', (request, response) => {
+    let paper = new Cite(request.query.doi)
+
+    let output = paper.format('bibliography', {
+    format: 'html',
+    template: request.query.style,
+    lang: 'en-US'
     })
+
+    response.send({
+        bib: convert(output)
+    })
+
 });
+    
 
 

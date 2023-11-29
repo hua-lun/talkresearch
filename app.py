@@ -65,7 +65,9 @@ def logout():
 @app.route('/reader')
 def reader():
     if session.get('user'):
-        return render_template('reader.html', session=session.get('user'))
+        username = session.get('user').get('userinfo').get('email')
+        titles = utils.get_titles(username)
+        return render_template('reader.html', session=session.get('user'), titles = titles)
     return redirect("/login")
 
 
@@ -84,6 +86,12 @@ def editor():
                 title = request.form.get('title_select')
                 content = utils.get_content(username, title)
                 return render_template('index.html', session=session.get('user'), content=content, titles=titles, title=title)
+            elif 'gen_bib' in request.form:
+                title = request.form.get('curr_title')
+                content = request.form.get('body')
+                updated_content = utils.generate_bibliography(username, title, content)
+                return render_template('index.html', session=session.get('user'), content=updated_content, titles=titles, title=title)
+
         return render_template('index.html', session=session.get('user'), titles=titles)
     return redirect("/login")
 
@@ -91,21 +99,41 @@ def editor():
 @app.route('/creator', methods=('GET', 'POST'))
 def creator():
     if session.get('user'):
+        username = session.get('user').get('userinfo').get('email')
+        titles = utils.get_titles(username)
         if request.method == 'POST':
-            title = request.form['title']
-            template = request.form.get('template_select')
-            citation = request.form.get('citation_select')
-            if not title:
-                flash('Title is required!')
-            elif not template:
-                flash('Content is required!')
-            elif not citation:
-                flash("Citation style is required!")
-            else:
-                info = [title, template, citation]
-                utils.create_doc(session.get('user').get('userinfo').get('email'), info)
-                return redirect(url_for('main'))
-        return render_template('create.html', session=session.get('user'))
+            if 'doc_submit' in request.form:
+                title = request.form['title']
+                template = request.form.get('template_select')
+                citation = request.form.get('citation_select')
+                if not title:
+                    flash('Title is required!')
+                elif not template:
+                    flash('Content is required!')
+                elif not citation:
+                    flash("Citation style is required!")
+                else:
+                    info = [title, template, citation]
+                    utils.create_doc(username, info)
+                    return redirect("/editor")
+            elif 'cite_submit' in request.form:
+                cite_doc = request.form.get('title_select')
+                doi = request.form['doi']
+                pdf_link = request.form['pdf_link']
+
+                if not pdf_link:
+                    pdf_link = ''
+
+                if not cite_doc:
+                    flash('Document title is required!')
+                elif not doi:
+                    flash("doi is required!")
+                elif not utils.is_valid_doi(doi):
+                    flash("Invalid doi entered")
+                else:
+                    utils.add_citation(cite_doc, doi, pdf_link, username)
+                    return redirect("/creator")
+        return render_template('create.html', session=session.get('user'), titles=titles)
     return redirect("/login")
 
 
