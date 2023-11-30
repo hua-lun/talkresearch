@@ -62,15 +62,6 @@ def logout():
     )
 
 
-@app.route('/reader')
-def reader():
-    if session.get('user'):
-        username = session.get('user').get('userinfo').get('email')
-        titles = utils.get_titles(username)
-        return render_template('reader.html', session=session.get('user'), titles = titles)
-    return redirect("/login")
-
-
 @app.route('/editor', methods=('GET', 'POST'))
 def editor():
     if session.get('user'):
