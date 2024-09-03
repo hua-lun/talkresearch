@@ -6,6 +6,53 @@ Devpost page: https://devpost.com/software/talkresearch
 ## Video Demo
 [![talkresearch video demo on YouTube](https://img.youtube.com/vi/MfSLZj6D1J0/0.jpg)](https://www.youtube.com/watch?v=MfSLZj6D1J0)
 
+## Running this app locally
+
+Clone project
+```bash
+git clone https://github.com/hua-lun/talkresearch.git 
+```
+
+### Part 1 (Running the Express app to use citations api)
+1. Open shell terminal to `citations`
+```bash
+cd citations
+```
+
+2. Install modules
+```bash
+npm install 
+```
+
+3. Run Express app
+```bash
+node index.js 
+```
+
+4. Take note of localhost url
+- By default, it hosts on port `3000` at `http://127.0.0.1:3000/citing?`
+### Part 2 (Running the Flask app)
+1. In a new shell, go to `talkresearch`'s root directory
+
+2. Install Python Requirements
+```bash
+pip install -r requirements.txt
+```
+
+3. Create `.env` based on `.env.sample`
+- MongoDB cluster
+- Auth0 
+- Flask secret key
+- URL in `part 1`
+
+4. Run Flask app
+```bash
+ flask run
+```
+
+5. Enter Flask app URL in browser and use
+
+## Devpost Writeup
 ## Inspiration
 Writing papers, preparing reports, they are very time consuming. 
 There's so many things to look out for. Such as - getting the correct format, making sure citations and references are given. In addition, we have to keep track of all the resources and readings to refer back. 
